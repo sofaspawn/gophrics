@@ -1,5 +1,4 @@
 # 2d graphics in Golang using ebiten
----
 
 Testing the waters rn.
 
