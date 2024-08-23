@@ -4,6 +4,7 @@ Testing the waters rn.
 
 ## DONE:
 - implement basic bounce physics
+- scale for multiple B A L L S
 
 ## TODO:
 - implement conservation of energy
