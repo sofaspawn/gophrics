@@ -38,21 +38,24 @@ func (g *Game) gameinitconfig() {
 	g.width, g.height = ebiten.WindowSize()
 	random_x := float32(g.width) * rand.Float32()
 	random_y := float32(g.height) * rand.Float32()
+	var radius float32 = 20
 	var velocity float64 = 5
+	var mass float32 = 5
 
-	g.addparticle(random_x, random_y, 50, [4]uint8{0, 255, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
-	g.addparticle(random_x, random_y, 50, [4]uint8{0, 0, 255, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
-	g.addparticle(random_x, random_y, 50, [4]uint8{255, 0, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
+	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 255, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
+	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 0, 255, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
+	g.addparticle(random_x, random_y, radius, mass, [4]uint8{255, 0, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
 
 	g.isinit = true
 }
 
-func (g *Game) addparticle(x_pos, y_pos, radius float32, c [4]uint8, anti_aliasing bool, direction [2]float32, velocity float64) {
+func (g *Game) addparticle(x_pos, y_pos, radius, mass float32, c [4]uint8, anti_aliasing bool, direction [2]float32, velocity float64) {
 	particle := Particle{}
 
 	particle.x_pos = x_pos
 	particle.y_pos = y_pos
 	particle.radius = radius
+	particle.mass = mass
 	particle.color = color.RGBA{c[0], c[1], c[2], c[3]}
 	particle.anti_aliasing = anti_aliasing
 	particle.direction = direction
@@ -62,21 +65,14 @@ func (g *Game) addparticle(x_pos, y_pos, radius float32, c [4]uint8, anti_aliasi
 }
 
 // FIXME: fix the gravity function
-/*
-func (g *Game) gravity(){
-    g.g = 10
-    for _, particle := range g.particles{
-        particle.direction[0] *=
-    }
+func (g *Game) gravity(particle *Particle) {
+	particle.direction[1] = particle.direction[1] - 0.1
 }
-*/
 
-func (g *Game) consvOfEnergy() {
-	for _, particle := range g.particles {
-		particle.potential = (particle.mass) * (g.g) * (float32(g.width) - particle.y_pos)
-		particle.total = particle.mass * (g.g) * float32(g.height)
-		particle.velocity = math.Sqrt(float64(2/particle.mass) * float64(particle.total-particle.potential))
-	}
+func (g *Game) consvOfEnergy(particle *Particle) {
+	particle.potential = (particle.mass) * (g.g) * (float32(g.height) - particle.y_pos)
+	particle.total = particle.mass * (g.g) * float32(g.height)
+	particle.velocity = math.Sqrt(float64(2/particle.mass) * float64(particle.total-particle.potential))
 }
 
 func bounce(particle *Particle) {
@@ -96,8 +92,9 @@ func (g *Game) Update() error {
 	}
 
 	for _, particle := range g.particles {
+		g.gravity(particle)
+		//g.consvOfEnergy(particle)
 		bounce(particle)
-		g.consvOfEnergy()
 		if g.timer%1 == 0 {
 			i, j := particle.direction[0], particle.direction[1]
 
