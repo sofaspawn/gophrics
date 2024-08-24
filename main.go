@@ -64,11 +64,12 @@ func (g *Game) addparticle(x_pos, y_pos, radius, mass float32, c [4]uint8, anti_
 	g.particles = append(g.particles, &particle)
 }
 
-// FIXME: fix the gravity function
+// FIXME: fix gravity 
 func (g *Game) gravity(particle *Particle) {
 	particle.direction[1] = particle.direction[1] - 0.1
 }
 
+// FIXME: fix conservation of energy
 func (g *Game) consvOfEnergy(particle *Particle) {
 	particle.potential = (particle.mass) * (g.g) * (float32(g.height) - particle.y_pos)
 	particle.total = particle.mass * (g.g) * float32(g.height)

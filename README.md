@@ -1,4 +1,4 @@
-# 2d graphics in Golang using ebiten
+# 2d graphics in Golang using ebiten (or B A L L S)
 
 Testing the waters rn.
 
