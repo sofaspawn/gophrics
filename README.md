@@ -2,14 +2,12 @@
 
 Testing the waters rn.
 
-## DONE:
-- implement basic bounce physics
-- scale for multiple B A L L S
-- implement BAD conservation of energy (im dumb)
-- implement BAD gravity (im even dumber)
-
 ## TODO:
-- implement good physics
+[x] implement basic bounce physics
+[x] scale for multiple B A L L S
+[x] implement BAD conservation of energy (im dumb)
+[x] implement BAD gravity (im even dumber)
+[ ] implement good physics
 
 ## PLANS:
 - convert this project into a physics engine
