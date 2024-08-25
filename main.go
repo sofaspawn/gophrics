@@ -3,7 +3,8 @@ package main
 import (
 	"image/color"
 	"log"
-	"math"
+
+	//"math"
 	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -38,8 +39,8 @@ func (g *Game) gameinitconfig() {
 	g.width, g.height = ebiten.WindowSize()
 	random_x := float32(g.width) * rand.Float32()
 	random_y := float32(g.height) * rand.Float32()
-	var radius float32 = 20
-	var velocity float64 = 5
+	var radius float32 = 100
+	var velocity float64 = 1
 	var mass float32 = 5
 
 	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 255, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
@@ -64,7 +65,8 @@ func (g *Game) addparticle(x_pos, y_pos, radius, mass float32, c [4]uint8, anti_
 	g.particles = append(g.particles, &particle)
 }
 
-// FIXME: fix gravity 
+// FIXME: fix gravity
+/*
 func (g *Game) gravity(particle *Particle) {
 	particle.direction[1] = particle.direction[1] - 0.1
 }
@@ -74,6 +76,12 @@ func (g *Game) consvOfEnergy(particle *Particle) {
 	particle.potential = (particle.mass) * (g.g) * (float32(g.height) - particle.y_pos)
 	particle.total = particle.mass * (g.g) * float32(g.height)
 	particle.velocity = math.Sqrt(float64(2/particle.mass) * float64(particle.total-particle.potential))
+}
+*/
+
+func (g *Game) change_radius(particle *Particle) {
+	if g.timer%1 == 0 {
+	}
 }
 
 func bounce(particle *Particle) {
@@ -93,7 +101,7 @@ func (g *Game) Update() error {
 	}
 
 	for _, particle := range g.particles {
-		g.gravity(particle)
+		//g.gravity(particle)
 		//g.consvOfEnergy(particle)
 		bounce(particle)
 		if g.timer%1 == 0 {
