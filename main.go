@@ -40,7 +40,7 @@ func (g *Game) gameinitconfig() {
 	random_x := float32(g.width) * rand.Float32()
 	random_y := float32(g.height) * rand.Float32()
 	var radius float32 = 100
-	var velocity float64 = 1
+	var velocity float64 = 5
 	var mass float32 = 5
 
 	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 255, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
@@ -80,17 +80,22 @@ func (g *Game) consvOfEnergy(particle *Particle) {
 */
 
 func (g *Game) change_radius(particle *Particle) {
-	if g.timer%1 == 0 {
-	}
+    if particle.radius<=100{
+        particle.radius += 500
+        return
+    }
+    particle.radius -= 5
 }
 
-func bounce(particle *Particle) {
+func (g *Game) bounce(particle *Particle) {
 	width, height := ebiten.WindowSize()
 	if particle.x_pos+particle.radius >= float32(width) || particle.x_pos-particle.radius <= 0 {
 		particle.direction[0] *= -1
+        g.change_radius(particle)
 	}
 	if particle.y_pos+particle.radius >= float32(height) || particle.y_pos-particle.radius <= 0 {
 		particle.direction[1] *= -1
+        g.change_radius(particle)
 	}
 }
 
@@ -103,7 +108,7 @@ func (g *Game) Update() error {
 	for _, particle := range g.particles {
 		//g.gravity(particle)
 		//g.consvOfEnergy(particle)
-		bounce(particle)
+		g.bounce(particle)
 		if g.timer%1 == 0 {
 			i, j := particle.direction[0], particle.direction[1]
 
@@ -120,11 +125,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		g.particles = []*Particle{}
 		g.gameinitconfig()
 	}
-	if len(g.particles) > 0 && g.particles[0] != nil {
-		for _, particle := range g.particles {
-			vector.DrawFilledCircle(screen, particle.x_pos, particle.y_pos, particle.radius, particle.color, particle.anti_aliasing)
-		}
-	}
+    if len(g.particles) > 0 && g.particles[0] != nil {
+        for _, particle := range g.particles {
+            vector.DrawFilledCircle(screen, particle.x_pos, particle.y_pos, particle.radius, particle.color, particle.anti_aliasing)
+        }
+    }
 	//fmt.Println(g.particles[0])
 }
 
