@@ -4,12 +4,13 @@ import (
 	"image/color"
 	"log"
 
-	//"math"
-	"math/rand"
+    //"math"
+    "math/rand"
 
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/vector"
+    "github.com/hajimehoshi/ebiten/v2"
+    "github.com/hajimehoshi/ebiten/v2/vector"
 )
+
 
 type Game struct {
 	isinit    bool
@@ -31,7 +32,6 @@ type Particle struct {
 	direction     [2]float32
 	potential     float32
 	total         float32
-	//kinetic       float32
 }
 
 func (g *Game) gameinitconfig() {
@@ -43,9 +43,9 @@ func (g *Game) gameinitconfig() {
 	var velocity float64 = 5
 	var mass float32 = 5
 
-	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 255, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
-	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 0, 255, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
-	g.addparticle(random_x, random_y, radius, mass, [4]uint8{255, 0, 0, 0}, true, [2]float32{10 * rand.Float32(), 10 * rand.Float32()}, velocity)
+	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 255, 0, 0}, true, [2]float32{5 * rand.Float32(), 5 * rand.Float32()}, velocity)
+	g.addparticle(random_x, random_y, radius, mass, [4]uint8{0, 0, 255, 0}, true, [2]float32{5 * rand.Float32(), 5 * rand.Float32()}, velocity)
+	g.addparticle(random_x, random_y, radius, mass, [4]uint8{255, 0, 0, 0}, true, [2]float32{5 * rand.Float32(), 5 * rand.Float32()}, velocity)
 
 	g.isinit = true
 }
@@ -80,8 +80,10 @@ func (g *Game) consvOfEnergy(particle *Particle) {
 */
 
 func (g *Game) change_radius(particle *Particle) {
-    if particle.radius<=100{
-        particle.radius += 500
+    if particle.radius<=20{
+        particle.x_pos = float32(g.width)/2
+        particle.y_pos = float32(g.height)/2
+        particle.radius += 200
         return
     }
     particle.radius -= 5
@@ -130,7 +132,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
             vector.DrawFilledCircle(screen, particle.x_pos, particle.y_pos, particle.radius, particle.color, particle.anti_aliasing)
         }
     }
-	//fmt.Println(g.particles[0])
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
